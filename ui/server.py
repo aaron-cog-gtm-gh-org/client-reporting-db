@@ -10,7 +10,88 @@ import duckdb
 TITLE = "Client Reporting"
 TABLE = "crd_loans"
 PORT = 8102
-STYLE = """*{box-sizing:border-box}body{margin:0;color:#203342;background:#edf1f4;font:14px Arial,sans-serif}a{color:#11696c;text-decoration:none}a:hover{text-decoration:underline}a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #208fbb;outline-offset:3px}header{display:flex;align-items:center;gap:34px;background:#233a49;color:white;padding:18px 28px}.brand{color:white;font-size:20px;font-weight:bold;letter-spacing:-.5px}.brand span{font-weight:normal}.app{border-left:1px solid #637582;padding-left:28px;font-size:17px}.readonly{margin-left:auto;font-size:12px;color:#d1e0e7}nav{display:flex;align-items:center;justify-content:space-between;padding:10px 28px;background:white;border-bottom:1px solid #c9d3da}nav form{display:flex;align-items:center;gap:10px}nav label{font-size:12px}input,select,button{font:inherit;padding:9px 11px;border:1px solid #b9c7cf;border-radius:3px;background:white;color:inherit}button{background:#176d71;color:white;border-color:#176d71;cursor:pointer}main{max-width:1480px;margin:auto;padding:28px}h1{font-size:29px;letter-spacing:-.7px;margin:5px 0 8px}h2{font-size:20px;margin:0 0 8px}.context{color:#526675;margin:0;font-size:12px}.heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}.count{font-size:13px;padding:8px 12px;border:1px solid #c5d1d8;background:#fff}.intro{color:#526675;line-height:1.6}section,.table-wrap{background:white}section{border:1px solid #cbd5dc}.table-wrap{overflow:auto}table{border-collapse:collapse;width:100%;white-space:nowrap;font-size:13px}th{text-align:left;color:#4c6170;background:#e5ecf0;font-weight:normal;padding:12px 15px;border-bottom:1px solid #bac8d1}td{padding:11px 15px;border-bottom:1px solid #dbe3e8}tbody tr:nth-child(even){background:#f6f8fa}tbody tr:hover{background:#edf5f6}.number{text-align:right;font-variant-numeric:tabular-nums}.section-title{padding:15px 20px;font-weight:bold;border-bottom:1px solid #cbd5dc}.section-title span{float:right;font-weight:normal;font-size:12px;color:#526675}.empty{padding:45px;margin-top:20px}.portfolio{display:flex;justify-content:space-between;align-items:center;margin:30px 0 24px}.portfolio p{color:#526675}.total{text-align:right}.total span{display:block;color:#526675;margin-bottom:8px}.total strong{font-size:32px;font-weight:normal;font-variant-numeric:tabular-nums}footer{max-width:1480px;margin:25px auto;padding:0 28px 20px;font-size:11px;color:#5c707e}footer span{float:right}@media(max-width:700px){header{flex-wrap:wrap;gap:14px;padding:18px}.readonly{margin-left:0}.app{padding-left:14px}nav{align-items:start;gap:15px;flex-direction:column;padding:16px}nav form{flex-wrap:wrap}main{padding:18px}.portfolio{align-items:start;gap:18px;flex-direction:column}.total{text-align:left}footer span{display:block;float:none;margin-top:10px}}body{background:#f3f6fb;color:#192f50;font-size:15px}header{background:#142e53;padding:24px 44px}.brand{font-family:Georgia,serif;font-weight:normal;font-size:26px}.brand span{font-style:italic}.app{font-size:15px}.readonly{color:#c9d9ef}nav{padding:16px 44px}nav a,a{color:#225ba0}main{max-width:1280px;padding:40px 44px}h1{font-family:Georgia,serif;font-size:38px;font-weight:normal;letter-spacing:-1px}.context{font-size:13px;color:#536b8d}.heading{margin-bottom:32px}.intro{color:#536b8d}.count{border:0;background:#e1eaf7;color:#274b7b;border-radius:20px;padding:10px 18px}.section-title{padding:20px 24px;border-color:#dce4ef}section{border-color:#dce4ef;border-radius:8px;overflow:hidden}th{background:#edf2f8;color:#536b8d;border-color:#dce4ef;padding:15px 22px}td{padding:18px 22px;border-color:#e5ebf3}table{font-size:14px}tbody tr:nth-child(even){background:white}tbody tr:hover{background:#f3f7fd}button{background:#225ba0;border-color:#225ba0;border-radius:4px}.portfolio{padding:26px 0;border-top:1px solid #d7e0ed}.total strong{font-family:Georgia,serif;font-size:38px}footer{max-width:1280px;padding:0 44px 25px}@media(max-width:700px){header{padding:18px}nav{padding:16px}main{padding:24px 18px}h1{font-size:32px}footer{padding:0 18px 25px}}"""
+# Adapted from citi-consumer-webapp/src/components/Icons.tsx (CitiLogo).
+LOGO = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 64" role="img" aria-label="Citi">
+<path d="M32 13C40 3 62 3 71 12" fill="none" stroke="#d9261c" stroke-width="4.5" stroke-linecap="round"/>
+<text x="2" y="59" fill="#255be3" font-family="Arial, Helvetica, sans-serif" font-size="52" font-weight="700" letter-spacing="-0.5">citi</text>
+</svg>"""
+STYLE = """*{box-sizing:border-box}
+body{margin:0;color:#283649;background:#f3f6fa;font:14px "Segoe UI",Arial,Helvetica,sans-serif}
+a{color:#0f1e82;text-decoration:none}
+a:hover{text-decoration:underline}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #255be3;outline-offset:3px}
+header{display:flex;align-items:center;gap:28px;background:#fff;padding:18px 32px;border-bottom:1px solid #e4eaf2}
+.brand{display:flex;align-items:center}
+.brand svg{display:block;width:88px;height:56px}
+.app{border-left:1px solid #d7dfeb;padding-left:28px;font-size:20px;font-weight:600;color:#0f1e82}
+.readonly{margin-left:auto;font-size:12px;color:#5a6b82}
+nav{display:flex;align-items:center;justify-content:space-between;padding:12px 32px;background:#f1f4f8;border-bottom:1px solid #dce4ef}
+nav>a{font-weight:600}
+nav form{display:flex;align-items:center;gap:10px}
+nav label{font-size:12px;color:#435572}
+input,select,button{font:inherit;padding:10px 12px;border:1px solid #bcc9dc;border-radius:7px;background:white;color:inherit}
+input::placeholder{color:#68788e}
+button{background:#0f1e82;color:white;border-color:#0f1e82;cursor:pointer;font-weight:600}
+button:hover{background:#182da5}
+main{max-width:1480px;margin:auto;padding:30px 32px}
+h1{font-size:30px;letter-spacing:-.7px;font-weight:600;color:#255be3;margin:6px 0 8px}
+h2{font-size:20px;font-weight:600;color:#0f1e82;margin:0 0 8px}
+.context{color:#526580;margin:0;font-size:12px}
+.heading{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px}
+.count{font-size:13px;padding:8px 14px;border-radius:20px;background:#e7edff;color:#0f1e82}
+section{background:white;border:1px solid #dce4ef;border-radius:22px;overflow:hidden}
+.table-wrap{background:white;overflow:auto;border:1px solid #dce4ef;border-radius:18px}
+section .table-wrap{border:0;border-radius:0}
+table{border-collapse:collapse;width:100%;white-space:nowrap;font-size:13px}
+th{text-align:left;color:#0f1e82;background:#f1f4f8;font-weight:600;padding:13px 15px;border-bottom:1px solid #dce4ef}
+td{padding:11px 15px;border-bottom:1px solid #e5ebf3}
+tbody tr:last-child td{border-bottom:0}
+tbody tr:nth-child(even){background:#fafbfe}
+tbody tr:hover{background:#f0f4ff}
+.number{text-align:right;font-variant-numeric:tabular-nums}
+.section-title{padding:18px 22px;color:#0f1e82;font-weight:600;border-bottom:1px solid #e1e7f0}
+.section-title span{float:right;font-weight:normal;font-size:12px;color:#526580}
+.empty{padding:38px;margin-top:20px}
+.portfolio{display:flex;justify-content:space-between;align-items:center;margin:26px 0 22px}
+.portfolio p{color:#526580}
+.total{text-align:right}
+.total span{display:block;color:#526580;margin-bottom:8px}
+.total strong{font-size:32px;font-weight:500;color:#255be3;font-variant-numeric:tabular-nums}
+footer{max-width:1480px;margin:22px auto;padding:0 32px 22px;font-size:12px;color:#5c6e85}
+footer span{float:right}
+body{font-size:15px}
+header{padding:20px 44px}
+nav{padding:16px 44px}
+main{max-width:1280px;padding:34px 44px}
+h1{font-size:38px;font-weight:500;letter-spacing:-1px}
+.context{font-size:13px}
+.heading{margin-bottom:28px}
+.intro{color:#526580;line-height:1.6}
+.count{padding:10px 18px}
+.section-title{padding:20px 24px}
+th{padding:15px 22px}
+td{padding:16px 22px}
+table{font-size:14px}
+tbody tr:nth-child(even){background:white}
+.portfolio{padding:22px 24px;background:white;border:1px solid #dce4ef;border-radius:22px;margin:24px 0 22px}
+.portfolio p{font-size:13px}
+.total strong{font-size:36px;letter-spacing:-.7px}
+footer{max-width:1280px;padding:0 44px 25px}
+@media(max-width:700px){
+header{flex-wrap:wrap;gap:14px;padding:16px 18px}
+.brand svg{width:72px;height:46px}
+.readonly{margin-left:0}
+.app{padding-left:14px;font-size:18px}
+nav{align-items:start;gap:15px;flex-direction:column;padding:16px 18px}
+nav form{flex-wrap:wrap}
+main{padding:24px 18px}
+h1{font-size:30px}
+.portfolio{align-items:start;gap:18px;flex-direction:column}
+.total{text-align:left}
+footer{padding:0 18px 22px}
+footer span{display:block;float:none;margin-top:10px}
+
+}"""
 LABELS = {
     "loan_id": "Loan ID", "client_id": "Client ID",
     "currency": "Currency", "balance": "Local balance", "balance_usd": "Balance USD",
@@ -36,13 +117,13 @@ def page(title, body):
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)} | {TITLE}</title><style>{STYLE}</style></head>
-<body><header><a class="brand" href="/">Northhaven <span>Bank</span></a>
+<body><header><a class="brand" href="/" aria-label="Citi home">{LOGO}</a>
 <div class="app">{TITLE}</div><span class="readonly">Read-only workspace</span></header>
 <nav><a href="/">Client directory</a>
 <form action="/loan" method="get"><label for="quick">Find a loan</label>
 <input id="quick" name="id" placeholder="Loan ID, e.g. L0016" required>
 <button>Open loan</button></form></nav>
-<main>{body}</main><footer>Northhaven Bank · Fictional demonstration data
+<main>{body}</main><footer>Demonstration data – synthetic
 <span>Refresh the page to load the latest data</span></footer></body></html>"""
 
 

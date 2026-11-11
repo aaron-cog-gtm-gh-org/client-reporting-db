@@ -4,6 +4,15 @@ import pytest
 from ui.server import render
 
 
+def test_citi_branding(database):
+    status, html = render("/")
+    assert status == 200
+    assert '<svg xmlns="http://www.w3.org/2000/svg"' in html
+    assert 'aria-label="Citi"' in html
+    assert "Demonstration data – synthetic" in html
+    assert "Northhaven" not in html
+
+
 @pytest.fixture
 def database(tmp_path, monkeypatch):
     path = tmp_path / "ui.duckdb"
